@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker News Feed</title>
+    <link rel="stylesheet" 
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body { background-color: #FFFDD0; }  /* Cream Background */
+        .navbar { background-color: #FFD700; } /* Yellow Navigation Bar */
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/">Hacker News</a>
+        <div class="navbar-nav">
+            <a class="nav-item nav-link {% if category == 'news' %}font-weight-bold{% endif %}" href="/?category=news">News</a>
+            <a class="nav-item nav-link {% if category == 'jobs' %}font-weight-bold{% endif %}" href="/?category=jobs">Jobs</a>
+        </div>
+    </nav>
+
+    <!-- News / Jobs Section -->
+    <div class="container mt-4">
+        <h3 class="mb-3">{% if category == 'jobs' %}Developer Jobs{% else %}Latest News{% endif %}</h3>
+
+        {% if stories %}
+            <ul class="list-group">
+                {% for story in stories %}
+                    <li class="list-group-item">
+                        <h5>
+                            <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
+                        </h5>
+                        <small>
+                            <strong>By:</strong> {{ story.source }} | 
+                            <strong>Time:</strong> {{ story.time }} | 
+                            <a href="https://news.ycombinator.com/item?id={{ story.id }}" target="_blank">Read More</a>
+                        </small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No content available.</p>
+        {% endif %}
+
+        <!-- Pagination Controls -->
+        <nav class="mt-4">
+            <ul class="pagination">
+                {% if offset > 0 %}
+                    <li class="page-item">
+                        <a class="page-link" href="/?category={{ category }}&limit={{ limit }}&offset={{ offset - limit }}">Previous</a>
+                    </li>
+                {% endif %}
+                <li class="page-item">
+                    <a class="page-link" href="/?category={{ category }}&limit={{ limit }}&offset={{ offset + limit }}">Next</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+</body>
+</html>
